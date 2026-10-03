@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#03050e">
+  <title>Ahmed Farag | Market Intelligence</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --gold:       #c9a227;
+      --gold-light: #f5d060;
+      --gold-dark:  #7a5f0a;
+      --gold-dim:   #3d2e05;
+      --bg:         #03050e;
+      --row-a:      #060a16;
+      --row-b:      #08101e;
+      --text:       #c0cce8;
+      --text-hi:    #e4ecff;
+      --dim:        #384860;
+      --border:     #101828;
+      --G:          #00e676;
+      --R:          #ff5252;
+      --C:          #40c4ff;
+    }
+
+    html { background: var(--bg); overflow-x: hidden; }
+
+    body {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
+    }
+
+    /* ─── HEADER ─────────────────────────────────── */
+    header {
+      position: relative;
+      background: linear-gradient(180deg, #080c20 0%, #04070f 100%);
+      border-bottom: 1px solid var(--gold-dim);
+      padding: 16px 14px 12px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg,
+        transparent 0%, var(--gold-dim) 15%,
+        var(--gold) 35%, var(--gold-light) 50%,
+        var(--gold) 65%, var(--gold-dim) 85%, transparent 100%);
+    }
+
+    .brand-eyebrow {
+      font-size: 7.5px;
+      letter-spacing: 5px;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    .brand-name {
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: clamp(22px, 6vw, 38px);
+      font-weight: 900;
+      letter-spacing: 5px;
+      background: linear-gradient(90deg,
+        #5c3f08, #c9a227, #f5d060, #c9a227, #e8c040, #c9a227, #5c3f08);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gold-shimmer 6s linear infinite;
+      line-height: 1;
+    }
+
+    @keyframes gold-shimmer {
+      0%   { background-position: 0% center; }
+      100% { background-position: 300% center; }
+    }
+
+    .brand-divider {
+      display: flex; align-items: center;
+      justify-content: center; gap: 10px;
+      margin: 8px 0 5px;
+    }
+
+    .brand-divider .ln {
+      flex: 1; max-width: 100px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dark));
+    }
+
+    .brand-divider .ln:last-child {
+      background: linear-gradient(90deg, var(--gold-dark), transparent);
+    }
+
+    .brand-divider .gem { color: var(--gold-dark); font-size: 9px; letter-spacing: 4px; }
+
+    .brand-tagline {
+      font-size: 7.5px; letter-spacing: 3.5px;
+      color: var(--gold-dark); text-transform: uppercase;
+    }
+
+    /* ─── INFO BAR ────────────────────────────────── */
+    .info-bar {
+      display: flex; justify-content: space-around;
+      align-items: center; background: #040710;
+      border-bottom: 1px solid var(--border);
+      padding: 6px 8px; gap: 4px;
+    }
+
+    .istat { display: flex; flex-direction: column; align-items: center; }
+
+    .ilabel {
+      font-size: 6.5px; letter-spacing: 0.8px;
+      color: #253040; text-transform: uppercase; white-space: nowrap;
+    }
+
+    .ival { font-size: 10.5px; font-weight: 700; color: var(--text); white-space: nowrap; }
+    .ival.gold  { color: var(--gold); }
+    .ival.green { color: var(--G);    }
+    .ival.cyan  { color: var(--C);    }
+    .ival.red   { color: var(--R);    }
+
+    /* ─── TABLE ──────────────────────────────────── */
+    .table-wrap {
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin; scrollbar-color: #1a2840 transparent;
+    }
+    .table-wrap::-webkit-scrollbar { height: 3px; }
+    .table-wrap::-webkit-scrollbar-thumb { background: #1a2840; border-radius: 2px; }
+
+    table { border-collapse: collapse; width: 100%; min-width: 960px; }
+
+    /* Sticky first 2 columns */
+    th:nth-child(1), td:nth-child(1) { position: sticky; left: 0; z-index: 4; min-width: 28px; width: 28px; }
+    th:nth-child(2), td:nth-child(2) { position: sticky; left: 28px; z-index: 4; min-width: 80px; }
+
+    thead th {
+      background: #040710;
+      border-bottom: 1px solid var(--gold-dim);
+      padding: 6px 8px; font-size: 7.5px;
+      letter-spacing: 0.5px; color: var(--dim);
+      text-align: right; white-space: nowrap;
+      font-weight: 500; text-transform: uppercase;
+    }
+
+    thead th.sort-col { color: var(--gold); border-bottom-color: var(--gold-dark); }
+    thead th.sort-col::after { content: ' \2193'; font-size: 9px; color: var(--gold-light); }
+
+    tbody tr:nth-child(even) { background: var(--row-a); }
+    tbody tr:nth-child(odd)  { background: var(--row-b); }
+    tbody tr:hover { filter: brightness(1.18); }
+
+    td {
+      padding: 8px 8px; text-align: right;
+      font-size: 11px; white-space: nowrap;
+      border-bottom: 1px solid #0a1020;
+      transition: background-color 0.35s, color 0.35s;
+    }
+
+    .td-rank { text-align: center; font-size: 11px; padding: 8px 3px; color: var(--dim); }
+    .td-sym  { text-align: left !important; font-weight: 700; font-size: 11.5px; color: var(--text-hi); letter-spacing: 0.5px; padding-left: 9px; }
+    .td-prc  { color: #7888a8; font-size: 10px; }
+
+    /* ─── STATUS / ERROR ─────────────────────────── */
+    .status-box {
+      text-align: center; padding: 60px 20px;
+      color: var(--gold-dark); font-size: 11px; letter-spacing: 2px;
+    }
+
+    .spin-ring {
+      display: inline-block; width: 20px; height: 20px;
+      border: 2px solid var(--gold-dim);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      vertical-align: middle; margin-right: 8px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .err-box {
+      text-align: center; padding: 50px 20px;
+      color: var(--R); font-size: 11px; letter-spacing: 1px; line-height: 1.8;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────── */
+    footer {
+      text-align: center; padding: 10px 8px;
+      font-size: 7px; letter-spacing: 2.5px;
+      color: var(--gold-dim); border-top: 1px solid #0c1428;
+      background: #020407; text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand-eyebrow">&#9672; &#8213;&#8213;&#8213; Professional Market Intelligence &#8213;&#8213;&#8213; &#9672;</div>
+  <h1 class="brand-name">AHMED FARAG</h1>
+  <div class="brand-divider">
+    <div class="ln"></div>
+    <span class="gem">&#9670; PRO CRYPTO DASHBOARD &#9670;</span>
+    <div class="ln"></div>
+  </div>
+  <div class="brand-tagline">Futures Market Analysis &nbsp;&bull;&nbsp; Live Data</div>
+</header>
+
+<div class="info-bar">
+  <div class="istat">
+    <span class="ilabel">Updated</span>
+    <span class="ival" id="scanTime">&#8212;&#8212;:&#8212;&#8212;:&#8212;&#8212;</span>
+  </div>
+  <div class="istat">
+    <span class="ilabel">Sorted by</span>
+    <span class="ival gold">1H CHANGE%</span>
+  </div>
+  <div class="istat">
+    <span class="ilabel">Showing</span>
+    <span class="ival green">Top 10 &#127942;</span>
+  </div>
+  <div class="istat">
+    <span class="ilabel">Refresh in</span>
+    <span class="ival cyan" id="countdown">30s</span>
+  </div>
+</div>
+
+<div id="content">
+  <div class="status-box">
+    <span class="spin-ring"></span>LOADING MARKET DATA...
+  </div>
+</div>
+
+<footer>Ahmed Farag &nbsp;&#9672;&nbsp; Crypto Market Intelligence &nbsp;&#9672;&nbsp; Powered by Binance Futures API</footer>
+
+<script>
+'use strict';
+
+// ── Telegram WebApp init ──────────────────────────────────────────────
+try {
+  if (window.Telegram && window.Telegram.WebApp) {
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+  }
+} catch(e) {}
+
+// ── Lerp helper ──────────────────────────────────────────────────────
+function lerp(a, b, t) { return a + (b - a) * Math.max(0, Math.min(1, t)); }
+
+// ══════════════════════════════════════════════════════════════════════
+// HEATMAP ENGINE
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Fixed-scale heatmap for percentage columns.
+ * positive → emerald gradient  |  negative → crimson gradient
+ */
+function heatStyle(value, scale) {
+  if (value == null || isNaN(value) || Math.abs(value) < 1e-5) return null;
+
+  const t = Math.pow(Math.min(1, Math.abs(value) / scale), 0.5);
+
+  if (value > 0) {
+    const bg = 'rgb(' +
+      Math.round(lerp( 6,  4, t)) + ',' +
+      Math.round(lerp(10, 74, t)) + ',' +
+      Math.round(lerp(18, 32, t)) + ')';
+    const tx = 'rgb(' +
+      Math.round(lerp( 70,   0, t)) + ',' +
+      Math.round(lerp(110, 230, t)) + ',' +
+      Math.round(lerp( 90, 118, t)) + ')';
+    return { background: bg, color: tx };
+  } else {
+    const bg = 'rgb(' +
+      Math.round(lerp( 6, 74, t)) + ',' +
+      Math.round(lerp(10,  8, t)) + ',' +
+      Math.round(lerp(18, 14, t)) + ')';
+    const tx = 'rgb(' +
+      Math.round(lerp(140, 255, t)) + ',' +
+      Math.round(lerp( 80,  82, t)) + ',' +
+      Math.round(lerp( 90,  82, t)) + ')';
+    return { background: bg, color: tx };
+  }
+}
+
+/**
+ * Relative heatmap for TPS / ATS / 4H VOL (no natural zero).
+ * highest value in current 10 rows → emerald
+ * lowest  value                    → crimson
+ */
+function relHeatStyle(value, min, max) {
+  var range = max - min;
+  if (range < 1e-9 || value == null) return null;
+
+  var norm  = (value - min) / range;   // 0..1
+  var delta = norm - 0.5;
+  var t     = Math.pow(Math.min(1, Math.abs(delta) * 2), 0.5);
+
+  if (delta >= 0) {
+    var bg = 'rgb(' +
+      Math.round(lerp( 6,  4, t)) + ',' +
+      Math.round(lerp(10, 74, t)) + ',' +
+      Math.round(lerp(18, 32, t)) + ')';
+    var tx = 'rgb(' +
+      Math.round(lerp( 70,   0, t)) + ',' +
+      Math.round(lerp(110, 230, t)) + ',' +
+      Math.round(lerp( 90, 118, t)) + ')';
+    return { background: bg, color: tx };
+  } else {
+    var bg2 = 'rgb(' +
+      Math.round(lerp( 6, 74, t)) + ',' +
+      Math.round(lerp(10,  8, t)) + ',' +
+      Math.round(lerp(18, 14, t)) + ')';
+    var tx2 = 'rgb(' +
+      Math.round(lerp(140, 255, t)) + ',' +
+      Math.round(lerp( 80,  82, t)) + ',' +
+      Math.round(lerp( 90,  82, t)) + ')';
+    return { background: bg2, color: tx2 };
+  }
+}
+
+function applyHeat(td, style) {
+  if (!style) return;
+  if (style.background) td.style.background = style.background;
+  if (style.color)      td.style.color = style.color;
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// FORMATTERS
+// ══════════════════════════════════════════════════════════════════════
+
+function fmtPrice(p) {
+  if (p == null || isNaN(p)) return '--';
+  if (p >= 10000) return p.toLocaleString('en',{maximumFractionDigits:0});
+  if (p >= 1000)  return p.toFixed(1);
+  if (p >= 100)   return p.toFixed(2);
+  if (p >= 1)     return p.toFixed(4);
+  return p.toFixed(6);
+}
+
+function fmtPct(v, dec) {
+  if (v == null || isNaN(v)) return '--';
+  dec = dec || 2;
+  return (v >= 0 ? '+' : '') + v.toFixed(dec) + '%';
+}
+
+function fmtZ(v) {
+  if (v == null || isNaN(v)) return '--';
+  return (v >= 0 ? '+' : '') + v.toFixed(2);
+}
+
+function fmtVol(v) {
+  if (v == null || isNaN(v)) return '--';
+  if (v >= 1e9) return (v/1e9).toFixed(2)+'B';
+  if (v >= 1e6) return (v/1e6).toFixed(1)+'M';
+  if (v >= 1e3) return (v/1e3).toFixed(0)+'K';
+  return v.toFixed(0);
+}
+
+function fmtTps(v) {
+  if (v == null || isNaN(v)) return '--';
+  if (v >= 100) return v.toFixed(0);
+  if (v >= 10)  return v.toFixed(1);
+  return v.toFixed(2);
+}
+
+function fmtAts(v) {
+  if (v == null || isNaN(v)) return '--';
+  if (v >= 1e6) return '$'+(v/1e6).toFixed(2)+'M';
+  if (v >= 1e3) return '$'+(v/1e3).toFixed(1)+'K';
+  return '$'+v.toFixed(0);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// COUNTDOWN
+// ══════════════════════════════════════════════════════════════════════
+
+var _cdTimer = null;
+
+function startCountdown(sec, onDone) {
+  if (_cdTimer) clearInterval(_cdTimer);
+  var t  = sec;
+  var el = document.getElementById('countdown');
+
+  _cdTimer = setInterval(function() {
+    t--;
+    if (el) {
+      el.textContent = t + 's';
+      el.className = 'ival ' + (t <= 5 ? 'red' : 'cyan');
+    }
+    if (t <= 0) {
+      clearInterval(_cdTimer);
+      onDone();
+    }
+  }, 1000);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// DATA FETCHING
+// ══════════════════════════════════════════════════════════════════════
+
+var BASE = 'https://fapi.binance.com';
+var SKIP = {'USDCUSDT':1,'BUSDUSDT':1,'TUSDUSDT':1,'BTCDOMUSDT':1,'DEFIUSDT':1,'USDTUSDT':1};
+
+function fetchData() {
+  return Promise.all([
+    fetch(BASE + '/fapi/v1/ticker/24hr').then(function(r) {
+      if (!r.ok) throw new Error('Binance API error: ' + r.status);
+      return r.json();
+    }),
+    fetch(BASE + '/fapi/v1/premiumIndex').then(function(r) { return r.json(); }).catch(function() { return []; }),
+  ]).then(function(results) {
+    var tickers = results[0];
+    var funding = results[1];
+
+    // Build funding map
+    var fundMap = {};
+    funding.forEach(function(f) {
+      fundMap[f.symbol] = parseFloat(f.lastFundingRate || 0) * 100;
+    });
+
+    // Filter top 30 by 24H volume
+    var cands = tickers
+      .filter(function(t) {
+        return t.symbol.endsWith('USDT') && !SKIP[t.symbol] && parseFloat(t.quoteVolume) > 5e6;
+      })
+      .sort(function(a, b) { return parseFloat(b.quoteVolume) - parseFloat(a.quoteVolume); })
+      .slice(0, 30);
+
+    // Parallel kline fetch
+    return Promise.all(
+      cands.map(function(t) {
+        return fetch(BASE + '/fapi/v1/klines?symbol=' + t.symbol + '&interval=1h&limit=26')
+          .then(function(r) { return r.json(); })
+          .catch(function() { return null; })
+          .then(function(kl) { return { tk: t, kl: kl }; });
+      })
+    ).then(function(data) {
+      var rows = [];
+
+      data.forEach(function(item) {
+        var tk = item.tk;
+        var kl = item.kl;
+        if (!kl || kl.length < 6) return;
+
+        var n   = kl.length;
+        var cur = kl[n-1];
+        var p1  = kl[n-2];
+        var p4  = kl[n-5];
+
+        var price    = parseFloat(tk.lastPrice);
+        var open1H   = parseFloat(cur[1]);
+        var open4H   = parseFloat(p4[1]);
+
+        var price1h  = (price - open1H) / open1H * 100;
+        var price4h  = (price - open4H) / open4H * 100;
+        var price24h = parseFloat(tk.priceChangePercent);
+
+        var curQV = parseFloat(cur[7]);
+        var curT  = parseInt(cur[8]);
+        var p1QV  = parseFloat(p1[7]);
+        var p1T   = parseInt(p1[8]);
+        var p4QV  = parseFloat(p4[7]);
+        var p4T   = parseInt(p4[8]);
+
+        // 4H volume
+        var vol4H = kl.slice(n-5).reduce(function(s,k) { return s + parseFloat(k[7]); }, 0);
+
+        // VOL Z-score (last 20 complete candles)
+        var hv = kl.slice(Math.max(0,n-22), n-2).map(function(k) { return parseFloat(k[7]); });
+        var avgV = hv.reduce(function(a,b){return a+b;}, 0) / (hv.length || 1);
+        var stdV = hv.length > 1
+          ? Math.sqrt(hv.reduce(function(s,v){return s+(v-avgV)*(v-avgV);}, 0) / hv.length)
+          : 1;
+        var volZ = stdV > 0 ? (curQV - avgV) / stdV : 0;
+
+        // TPS
+        var tps   = curT / 3600;
+        var p1Tps = p1T  / 3600;
+        var p4Tps = p4T  / 3600;
+        var tps1h = p1Tps > 0 ? (tps - p1Tps) / p1Tps * 100 : 0;
+        var tps4h = p4Tps > 0 ? (tps - p4Tps) / p4Tps * 100 : 0;
+
+        // ATS
+        var ats   = curT > 0 ? curQV / curT : 0;
+        var p1Ats = p1T  > 0 ? p1QV  / p1T  : 0;
+        var p4Ats = p4T  > 0 ? p4QV  / p4T  : 0;
+        var ats1h = p1Ats > 0 ? (ats - p1Ats) / p1Ats * 100 : 0;
+        var ats4h = p4Ats > 0 ? (ats - p4Ats) / p4Ats * 100 : 0;
+
+        rows.push({
+          sym: tk.symbol.replace('USDT',''),
+          price: price,
+          price1h: price1h, price4h: price4h, price24h: price24h,
+          vol4H: vol4H, volZ: volZ,
+          tps: tps, tps1h: tps1h, tps4h: tps4h,
+          ats: ats, ats1h: ats1h, ats4h: ats4h,
+          fund: fundMap[tk.symbol] || 0,
+        });
+      });
+
+      rows.sort(function(a,b) { return b.price1h - a.price1h; });
+      return rows.slice(0, 10);
+    });
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// COLUMN DEFINITIONS
+// ══════════════════════════════════════════════════════════════════════
+// { h, fmt, heat, val, scale, sortCol }
+// heat: 'pct' | 'rel' | null
+
+var RANK_LABELS = ['\uD83E\uDD47','\uD83E\uDD48','\uD83E\uDD49']; // 🥇🥈🥉
+
+var COLS = [
+  { h: '#',       fmt: function(_,i){ return RANK_LABELS[i] || (i+1); },  heat: null },
+  { h: 'SYMBOL',  fmt: function(r){ return r.sym; },                       heat: null },
+  { h: 'PRICE',   fmt: function(r){ return fmtPrice(r.price); },           heat: null },
+  { h: '1H %',    fmt: function(r){ return fmtPct(r.price1h); },  heat:'pct', val:function(r){return r.price1h;},  scale:3,    sortCol:true },
+  { h: '4H %',    fmt: function(r){ return fmtPct(r.price4h); },  heat:'pct', val:function(r){return r.price4h;},  scale:8    },
+  { h: '24H %',   fmt: function(r){ return fmtPct(r.price24h);},  heat:'pct', val:function(r){return r.price24h;}, scale:20   },
+  { h: '4H VOL',  fmt: function(r){ return fmtVol(r.vol4H); },   heat:'rel', val:function(r){return r.vol4H;}     },
+  { h: 'VOL Z',   fmt: function(r){ return fmtZ(r.volZ); },       heat:'pct', val:function(r){return r.volZ;},     scale:3    },
+  { h: 'TPS',     fmt: function(r){ return fmtTps(r.tps); },      heat:'rel', val:function(r){return r.tps;}       },
+  { h: '1H TPS%', fmt: function(r){ return fmtPct(r.tps1h,1);},  heat:'pct', val:function(r){return r.tps1h;},   scale:50   },
+  { h: '4H TPS%', fmt: function(r){ return fmtPct(r.tps4h,1);},  heat:'pct', val:function(r){return r.tps4h;},   scale:100  },
+  { h: 'ATS',     fmt: function(r){ return fmtAts(r.ats); },      heat:'rel', val:function(r){return r.ats;}       },
+  { h: '1H ATS%', fmt: function(r){ return fmtPct(r.ats1h,1);},  heat:'pct', val:function(r){return r.ats1h;},   scale:30   },
+  { h: '4H ATS%', fmt: function(r){ return fmtPct(r.ats4h,1);},  heat:'pct', val:function(r){return r.ats4h;},   scale:50   },
+  { h: 'FUND%',   fmt: function(r){ return fmtPct(r.fund,4);},    heat:'pct', val:function(r){return r.fund;},    scale:0.05 },
+];
+
+// ══════════════════════════════════════════════════════════════════════
+// RENDER TABLE
+// ══════════════════════════════════════════════════════════════════════
+
+function renderTable(data) {
+  // Pre-compute min/max for 'rel' columns
+  COLS.forEach(function(col) {
+    if (col.heat !== 'rel') return;
+    var vals = data.map(col.val).filter(function(v){return v!=null&&!isNaN(v);});
+    col._min = Math.min.apply(null, vals);
+    col._max = Math.max.apply(null, vals);
+  });
+
+  var table = document.createElement('table');
+
+  // Header
+  var thead = table.createTHead();
+  var hrow  = thead.insertRow();
+  COLS.forEach(function(col) {
+    var th = document.createElement('th');
+    th.textContent = col.h;
+    if (col.sortCol) th.className = 'sort-col';
+    hrow.appendChild(th);
+  });
+
+  // Body
+  var tbody = table.createTBody();
+  data.forEach(function(row, ri) {
+    var tr = tbody.insertRow();
+
+    COLS.forEach(function(col, ci) {
+      var td = tr.insertCell();
+      td.textContent = col.fmt(row, ri);
+
+      if (ci === 0) td.className = 'td-rank';
+      if (ci === 1) td.className = 'td-sym';
+      if (ci === 2) td.className = 'td-prc';
+
+      if (col.heat === 'pct' && col.val) {
+        applyHeat(td, heatStyle(col.val(row), col.scale));
+      } else if (col.heat === 'rel' && col.val) {
+        applyHeat(td, relHeatStyle(col.val(row), col._min, col._max));
+      }
+    });
+  });
+
+  var wrap = document.createElement('div');
+  wrap.className = 'table-wrap';
+  wrap.appendChild(table);
+
+  var content = document.getElementById('content');
+  content.innerHTML = '';
+  content.appendChild(wrap);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// STATUS HELPERS
+// ══════════════════════════════════════════════════════════════════════
+
+function showLoading(msg) {
+  msg = msg || 'LOADING MARKET DATA...';
+  document.getElementById('content').innerHTML =
+    '<div class="status-box"><span class="spin-ring"></span>' + msg + '</div>';
+}
+
+function showError(msg) {
+  document.getElementById('content').innerHTML =
+    '<div class="err-box">&#9888;&nbsp; ' + msg +
+    '<br><small style="color:#333;font-size:9px">Retrying in 30 seconds&#8230;</small></div>';
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// MAIN LOOP
+// ══════════════════════════════════════════════════════════════════════
+
+function fetchAndRender() {
+  showLoading();
+
+  fetchData().then(function(data) {
+    if (!data || !data.length) {
+      showError('No data returned from Binance API.');
+      startCountdown(30, fetchAndRender);
+      return;
+    }
+
+    renderTable(data);
+
+    var el = document.getElementById('scanTime');
+    if (el) el.textContent = new Date().toTimeString().slice(0,8);
+
+    startCountdown(30, fetchAndRender);
+
+  }).catch(function(err) {
+    console.error(err);
+    showError(err.message || 'Unknown error');
+    startCountdown(30, fetchAndRender);
+  });
+}
+
+// Launch
+fetchAndRender();
+</script>
+</body>
+</html>
