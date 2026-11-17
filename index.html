@@ -646,8 +646,8 @@
       </div>
       <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
         <select id="liqScopeSelect" onchange="fetchAndRenderLiqSniper()" style="background:#090f20; color:var(--gold-light); border:1px solid var(--gold-dark); border-radius:6px; padding:6px 10px; font-family:'JetBrains Mono'; font-size:11px; cursor:pointer;">
+          <option value="exclude_top20" selected>⚡ Exclude Top 20 (Mid-Caps High Rebound)</option>
           <option value="all">🌐 All Active (Vol &gt; $20M)</option>
-          <option value="exclude_top20">⚡ Exclude Top 20 (Mid-Caps High Rebound)</option>
           <option value="top25">👑 Top 25 Only (Mega-Cap Safety)</option>
         </select>
         <button class="btn-action" onclick="fetchAndRenderLiqSniper()">
@@ -1290,7 +1290,7 @@ function fetchAndRenderLiqSniper() {
     tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:30px; color:var(--gold);"><span class="spin-ring"></span> جاري فحص تصفيات اللونج والبحث عن أفضل القيعان...</td></tr>';
   }
 
-  var scope = document.getElementById('liqScopeSelect') ? document.getElementById('liqScopeSelect').value : 'all';
+  var scope = document.getElementById('liqScopeSelect') ? document.getElementById('liqScopeSelect').value : 'exclude_top20';
 
   Promise.all([
     fetch(BASE + '/fapi/v1/ticker/24hr').then(r => r.json()),
@@ -1338,12 +1338,18 @@ function fetchAndRenderLiqSniper() {
       dropping.sort((a,b) => a.p1Chg - b.p1Chg);
       var checkList = dropping.slice(0, 15);
 
-      if (checkList.length === 0) {
-        checkList = candidates.slice(0, 10).map(t => ({
-          tk: t,
-          curP: parseFloat(t.lastPrice),
-          p1Chg: parseFloat(t.priceChangePercent)
-        }));
+      if (checkList.length < 5) {
+        var existingSyms = new Set(checkList.map(x => x.tk.symbol));
+        for (var i = 0; i < candidates.length && checkList.length < 10; i++) {
+          if (!existingSyms.has(candidates[i].symbol)) {
+            checkList.push({
+              tk: candidates[i],
+              curP: parseFloat(candidates[i].lastPrice),
+              p1Chg: parseFloat(candidates[i].priceChangePercent)
+            });
+            existingSyms.add(candidates[i].symbol);
+          }
+        }
       }
 
       return Promise.all(

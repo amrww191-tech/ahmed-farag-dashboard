@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.log
+.env
+*.png
+telegram_bot_backup.py
+update_bot.py
+update_dashboard.py
+update_lord_coin.py
+update_web_lord.py
+START_SCANNER.bat
+START_TELEGRAM_BOT.bat
+PUSH_TO_GITHUB.bat
+scratch/
+.git/
