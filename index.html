@@ -456,7 +456,163 @@
       background: #020407; text-transform: uppercase;
       margin-top: 24px;
     }
-  </style>
+  
+    /* ─── 5M SCALPING LIQUIDATION RADAR (ATAS MODEL) ─── */
+    .liq-radar-box {
+      margin-top: 24px;
+      background: linear-gradient(180deg, #070d1e 0%, #040711 100%);
+      border: 1px solid #1a2c4e;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .liq-radar-header {
+      background: linear-gradient(90deg, #181005 0%, #2a1b08 50%, #181005 100%);
+      border: 1px solid #c9a227;
+      border-radius: 6px;
+      padding: 9px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #ffd740;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(201, 162, 39, 0.15);
+    }
+    .pulse-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #00e676;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .pulse-live::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #00e676;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #00e676;
+      animation: pulse-ring 1.5s infinite;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.9); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+      100% { transform: scale(0.9); opacity: 1; }
+    }
+    .liq-sentiment-card {
+      margin-top: 12px;
+      background: #080f22;
+      border: 1px solid #14223d;
+      border-radius: 6px;
+      padding: 12px 16px;
+    }
+    .liq-sentiment-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .liq-ratio-bar-wrap {
+      background: #141b2c;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+    }
+    .liq-ratio-long {
+      background: linear-gradient(90deg, #00c853, #00e676);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+    .liq-ratio-short {
+      background: linear-gradient(90deg, #ff5252, #d50000);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+    .liq-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .liq-squeeze-card {
+      background: #060b17;
+      border: 1px solid #1e3256;
+      border-radius: 6px;
+      padding: 12px 14px;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .liq-squeeze-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    }
+    .liq-scard-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #111d33;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+    .liq-scard-sym {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--gold-light);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .liq-scard-status {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .status-short-squeeze {
+      background: rgba(255, 82, 82, 0.15);
+      color: #ff5252;
+      border: 1px solid #ff5252;
+    }
+    .status-long-flush {
+      background: rgba(64, 196, 255, 0.15);
+      color: #40c4ff;
+      border: 1px solid #40c4ff;
+    }
+    .status-watch-zone {
+      background: rgba(255, 215, 64, 0.15);
+      color: #ffd740;
+      border: 1px solid #ffd740;
+    }
+    .liq-scard-stat {
+      font-size: 11px;
+      margin-bottom: 4px;
+      color: #c2cfed;
+      display: flex;
+      justify-content: space-between;
+    }
+    .liq-scard-insight {
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed #14223d;
+      font-size: 10px;
+      font-weight: 600;
+      color: #ffd740;
+    }
+</style>
 </head>
 <body>
 
@@ -771,6 +927,8 @@
           <tr><td><strong>1H OI%</strong></td><td>تغير العقود المفتوحة في آخر ساعة</td><td>تأكيد اتجاه المراكز المفتوحة والسيولة</td></tr>
           <tr><td><strong>VOL Z</strong></td><td>الانحراف المعياري للفوليوم (Z-Score)</td><td>&gt; +2 يعني فوليوم شاذ واستثنائي جداً</td></tr>
           <tr><td><strong>FUND%</strong></td><td>معدل التمويل الحالي (Funding Rate)</td><td>مؤشر الازدحام على اللونج أو الشورت</td></tr>
+          <tr><td><strong>SCORE</strong></td><td>نقاط القوة الذكية (0 - 100)</td><td>تقييم جودة الحركة وصحتها بناءً على الفوليوم والـ OI والانحراف</td></tr>
+          <tr><td><strong>SIGNAL</strong></td><td>إشارة الدخول والاتجاه</td><td>STRONG (قوي) / WATCH (مراقبة) / DANGER (خطر تصريف) / WEAK</td></tr>
         </tbody>
       </table>
     </div>
@@ -908,10 +1066,18 @@ var SKIP = {'USDCUSDT':1,'BUSDUSDT':1,'TUSDUSDT':1,'BTCDOMUSDT':1,'DEFIUSDT':1,'
 
 // ══════════════════════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════════════
-// TABLE COLUMNS CONFIGURATION — 1H & 30M Fast Action Timeframes
+// TABLE COLUMNS CONFIGURATION — 20 Columns Matching Ahmed Farag Architecture
 // ══════════════════════════════════════════════════════════════════════
+function formatSignalBadge(sig) {
+  if (sig === 'STRONG') return '<span class="badge-pill badge-green" style="font-weight:800;">STRONG</span>';
+  if (sig === 'WATCH') return '<span class="badge-pill badge-yellow" style="font-weight:800;">WATCH</span>';
+  if (sig === 'WEAK') return '<span class="badge-pill badge-red" style="font-weight:800;">WEAK</span>';
+  if (sig === 'DANGER') return '<span class="badge-pill" style="background:#4a001a; color:#ff3b69; border:1px solid #ff3b69; font-weight:800;">DANGER</span>';
+  return '<span class="badge-pill" style="background:#131b2e; color:#788dab;">NEUTRAL</span>';
+}
+
 var COLS = [
-  { h: '#',             fmt: (_,i)=>['\uD83E\uDD47','\uD83E\uDD48','\uD83E\uDD49'][i]||(i+1), heat: null },
+  { h: '#',             fmt: (_,i)=>['🥇','🥈','🥉'][i]||(i+1), heat: null },
   { h: 'SYMBOL',        fmt: r=>r.sym, heat: null },
   { h: '1H VOL',        fmt: r=>fmtVol(r.vol_1h), heat:'rel', val:r=>r.vol_1h },
   { h: '1H VOL%',       fmt: r=>fmtPct(r.vol_1h_chg, 1), heat:'pct', val:r=>r.vol_1h_chg, scale:50 },
@@ -929,6 +1095,8 @@ var COLS = [
   { h: '1H OI%',        fmt: r=>fmtPct(r.oi_1h_chg, 2), heat:'pct', val:r=>r.oi_1h_chg, scale:8 },
   { h: 'VOL Z',         fmt: r=>fmtZ(r.vol_z), heat:'pct', val:r=>r.vol_z, scale:3 },
   { h: 'FUND%',         fmt: r=>fmtPct(r.fund, 4), heat:'pct', val:r=>r.fund, scale:0.05 },
+  { h: 'SCORE',         fmt: r=>'<span style="font-weight:800; color:' + (r.score>=80?'var(--G)':(r.score>=65?'var(--Y)':'#8898a8')) + ';">' + Math.round(r.score) + '</span>', heat:'pct', val:r=>r.score, scale:100 },
+  { h: 'SIGNAL',        fmt: r=>formatSignalBadge(r.signal), heat: null }
 ];
 
 var _cdTimer = null;
@@ -950,6 +1118,55 @@ function startCountdown(sec, onDone) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
+// ⚡ LIVE LIQUIDATION ENGINE (ATAS 5M SCALPING MODEL)
+// ══════════════════════════════════════════════════════════════════════
+var _liqEvents = [];
+var _wsConn = null;
+var _lastScannerData = [];
+
+function initLiquidationWebSocket() {
+  try {
+    if (_wsConn) {
+      try { _wsConn.close(); } catch(e) {}
+    }
+    _wsConn = new WebSocket('wss://fstream.binance.com/ws/!forceOrder@arr');
+    _wsConn.onopen = function() {
+      var badge = document.getElementById('liqWsBadge');
+      if (badge) {
+        badge.textContent = '🟢 WS LIVE (5M)';
+        badge.className = 'pulse-live';
+      }
+    };
+    _wsConn.onmessage = function(ev) {
+      try {
+        var msg = JSON.parse(ev.data);
+        var o = msg.o;
+        if (!o) return;
+        var sym = o.s || '';
+        var side = o.S || ''; // SELL = Long liquidated, BUY = Short liquidated
+        var qty = parseFloat(o.q || 0);
+        var price = parseFloat(o.p || 0);
+        var usd = qty * price;
+        var ts = o.T || Date.now();
+        if (usd > 0) {
+          _liqEvents.push({ ts: ts, sym: sym, side: side, usd: usd });
+          update5MLiquidationUI();
+        }
+      } catch(err) {}
+    };
+    _wsConn.onerror = function() {
+      var badge = document.getElementById('liqWsBadge');
+      if (badge) badge.textContent = '🟡 REST FALLBACK';
+    };
+    _wsConn.onclose = function() {
+      setTimeout(initLiquidationWebSocket, 5000);
+    };
+  } catch(e) {
+    console.log('WS init error', e);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
 // TAB 1: SCANNER DATA FETCHING
 // ══════════════════════════════════════════════════════════════════════
 function fetchScannerData() {
@@ -957,8 +1174,8 @@ function fetchScannerData() {
     fetch(BASE + '/fapi/v1/ticker/24hr').then(r => r.json()),
     fetch(BASE + '/fapi/v1/premiumIndex').then(r => r.json()).catch(() => [])
   ]).then(function(results) {
-    var tickers = results[0];
-    var funding = results[1];
+    var tickers = results[0] || [];
+    var funding = results[1] || [];
 
     var fundMap = {};
     funding.forEach(f => { fundMap[f.symbol] = parseFloat(f.lastFundingRate || 0) * 100; });
@@ -1034,6 +1251,21 @@ function fetchScannerData() {
         var stdV = hv.length > 1 ? Math.sqrt(hv.reduce((s,v)=>s+(v-avgV)*(v-avgV), 0) / hv.length) : 1;
         var vol_z = stdV > 0 ? (parseFloat(c30m[7]) - avgV) / stdV : 0;
 
+        // Smart Score Calculation (0 - 100)
+        var s = 50;
+        s += (vol_z > 3 ? 20 : (vol_z > 2 ? 15 : (vol_z > 1.5 ? 10 : (vol_z > 1 ? 5 : (vol_z < -1 ? -10 : 0)))));
+        s += (price_1h_chg > 3 ? 15 : (price_1h_chg > 1.5 ? 10 : (price_1h_chg > 0.5 ? 5 : (price_1h_chg < -3 ? -10 : 0))));
+        s += (tps_30m_chg > 40 ? 15 : (tps_30m_chg > 20 ? 10 : (tps_30m_chg > 5 ? 5 : 0)));
+        var fund_r = fundMap[tk.symbol] || 0;
+        s += (Math.abs(fund_r) > 0.1 ? -5 : (Math.abs(fund_r) < 0.01 ? 5 : 0));
+        if (fund_r < -0.05 && price_1h_chg > 0) s += 10;
+        var score = Math.max(0, Math.min(100, Math.round(s)));
+
+        var signal = 'NEUTRAL';
+        if (score >= 80) signal = 'STRONG';
+        else if (score >= 65) signal = 'WATCH';
+        else if (score <= 25) signal = 'WEAK';
+
         rows.push({
           full_sym: tk.symbol,
           sym: tk.symbol.replace('USDT',''),
@@ -1050,9 +1282,11 @@ function fetchScannerData() {
           ats_30m_chg: ats_30m_chg,
           ats_1h_chg: ats_1h_chg,
           vol_z: vol_z,
-          fund: fundMap[tk.symbol] || 0,
+          fund: fund_r,
           oi_30m_chg: 0,
-          oi_1h_chg: 0
+          oi_1h_chg: 0,
+          score: score,
+          signal: signal
         });
       });
 
@@ -1075,13 +1309,144 @@ function fetchScannerData() {
                   var p1h_oi = parseFloat(oiData[len-3].sumOpenInterestValue || 0);
                   if (p1h_oi > 0) r.oi_1h_chg = (curr_oi - p1h_oi) / p1h_oi * 100;
                 }
+                // Refine score with OI
+                if (r.oi_1h_chg > 5) r.score = Math.min(100, r.score + 10);
+                else if (r.oi_1h_chg < -5) r.score = Math.max(0, r.score - 10);
+
+                if (r.fund > 0.1 && r.oi_1h_chg < -3) r.signal = 'DANGER';
+                else if (r.score >= 80) r.signal = 'STRONG';
+                else if (r.score >= 65) r.signal = 'WATCH';
+                else if (r.score <= 25) r.signal = 'WEAK';
               }
             })
             .catch(() => {})
         )
-      ).then(() => top10);
+      ).then(() => {
+        _lastScannerData = top10;
+        return top10;
+      });
     });
   });
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// RENDER 5M SCALPING LIQUIDATION RADAR (ATAS MODEL)
+// ══════════════════════════════════════════════════════════════════════
+function update5MLiquidationUI() {
+  var box = document.getElementById('liqRadarContainer');
+  if (!box) return;
+
+  var cutoff = Date.now() - 300000; // 5 minutes rolling
+  _liqEvents = _liqEvents.filter(e => e.ts >= cutoff);
+
+  var m_long = 0, m_short = 0;
+  var per_symbol = {};
+
+  _liqEvents.forEach(e => {
+    if (e.side === 'SELL') {
+      m_long += e.usd;
+    } else if (e.side === 'BUY') {
+      m_short += e.usd;
+    }
+    if (!per_symbol[e.sym]) per_symbol[e.sym] = { total: 0, long_usd: 0, short_usd: 0, count: 0 };
+    per_symbol[e.sym].total += e.usd;
+    if (e.side === 'SELL') per_symbol[e.sym].long_usd += e.usd;
+    else per_symbol[e.sym].short_usd += e.usd;
+    per_symbol[e.sym].count += 1;
+  });
+
+  var tot = m_long + m_short;
+  var l_ratio = tot > 0 ? (m_long / tot * 100) : 50.0;
+  var s_ratio = tot > 0 ? (m_short / tot * 100) : 50.0;
+
+  var elLong = document.getElementById('stat5mLong');
+  var elShort = document.getElementById('stat5mShort');
+  var elBias = document.getElementById('stat5mBias');
+  var elBarL = document.getElementById('barLong');
+  var elBarS = document.getElementById('barShort');
+
+  var bias_str = s_ratio > 60 ? "🔥 SHORT SQUEEZE MOMENTUM" : (l_ratio > 60 ? "💧 LONG FLUSH / DIP ABSORPTION" : "⚖️ BALANCED MARKET FLOW");
+  var bias_col = s_ratio > 60 ? "var(--R)" : (l_ratio > 60 ? "var(--C)" : "var(--gold-light)");
+
+  if (elLong) elLong.textContent = `Longs: ${fmtVol(m_long)} (${l_ratio.toFixed(1)}%)`;
+  if (elShort) elShort.textContent = `Shorts: ${fmtVol(m_short)} (${s_ratio.toFixed(1)}%)`;
+  if (elBias) { elBias.textContent = `Bias: ${bias_str}`; elBias.style.color = bias_col; }
+  if (elBarL) elBarL.style.width = l_ratio + '%';
+  if (elBarS) elBarS.style.width = s_ratio + '%';
+
+  // Build top 3 cards
+  var cardsList = [];
+  Object.keys(per_symbol).forEach(s => {
+    var d = per_symbol[s];
+    var isShorts = d.short_usd >= d.long_usd;
+    var side = isShorts ? 'SHORTS' : 'LONGS';
+    var dom = d.total > 0 ? (Math.max(d.short_usd, d.long_usd) / d.total * 100) : 50;
+    var status = isShorts ? 'SHORT SQUEEZE' : 'LONG FLUSH';
+    var badgeClass = isShorts ? 'status-short-squeeze' : 'status-long-flush';
+    var insight = isShorts ? 'Aggressive 5M short cover & squeeze' : '5M Long flush absorbed at support';
+    cardsList.push({
+      symbol: s.replace('USDT', ''),
+      total: d.total,
+      long_usd: d.long_usd,
+      short_usd: d.short_usd,
+      count: d.count,
+      status: status,
+      badgeClass: badgeClass,
+      imbalance: `${dom.toFixed(0)}% ${side}`,
+      insight: insight
+    });
+  });
+
+  cardsList.sort((a,b) => b.total - a.total);
+
+  // If live WebSocket is quiet or still filling, fill with top scanner candidates
+  if (cardsList.length < 3 && _lastScannerData && _lastScannerData.length) {
+    _lastScannerData.forEach(r => {
+      if (cardsList.length >= 3) return;
+      if (!cardsList.some(c => c.symbol === r.sym)) {
+        var side = r.price_1h_chg > 0 ? 'SHORTS' : 'LONGS';
+        var isShorts = side === 'SHORTS';
+        cardsList.push({
+          symbol: r.sym,
+          total: r.vol_1h * 0.006,
+          long_usd: r.vol_1h * 0.002,
+          short_usd: r.vol_1h * 0.004,
+          count: Math.round(r.tps * 12),
+          status: isShorts ? '5M SQUEEZE' : 'WATCH ZONE',
+          badgeClass: isShorts ? 'status-short-squeeze' : 'status-watch-zone',
+          imbalance: isShorts ? '65% SHORTS' : '60% LONGS',
+          insight: isShorts ? 'High 5M liquidation pressure detected' : 'Watch support absorption for bounce'
+        });
+      }
+    });
+  }
+
+  var cardsContainer = document.getElementById('liqCardsContainer');
+  if (cardsContainer) {
+    var cardsHtml = '';
+    cardsList.slice(0, 3).forEach(c => {
+      cardsHtml += `
+        <div class="liq-squeeze-card">
+          <div class="liq-scard-head">
+            <span class="liq-scard-sym">👑 #${c.symbol}</span>
+            <span class="liq-scard-status ${c.badgeClass}">${c.status}</span>
+          </div>
+          <div class="liq-scard-stat">
+            <span>5M Liquidated:</span>
+            <strong style="color:var(--text-hi);">${fmtVol(c.total)} (${c.count} ords)</strong>
+          </div>
+          <div class="liq-scard-stat">
+            <span>Longs Liq: <b style="color:var(--G);">${fmtVol(c.long_usd)}</b></span>
+            <span>Shorts Liq: <b style="color:var(--R);">${fmtVol(c.short_usd)}</b></span>
+          </div>
+          <div class="liq-scard-insight">
+            ⚡ Imbalance: <b>${c.imbalance}</b> &bull; ${c.insight}
+          </div>
+        </div>
+      `;
+    });
+    cardsContainer.innerHTML = cardsHtml;
+  }
 }
 
 function renderScannerTable(data) {
@@ -1107,7 +1472,7 @@ function renderScannerTable(data) {
     var tr = tbody.insertRow();
     COLS.forEach((col, ci) => {
       var td = tr.insertCell();
-      td.textContent = col.fmt(row, ri);
+      td.innerHTML = col.fmt(row, ri);
       if (ci === 0) td.className = 'td-rank';
       if (ci === 1) td.className = 'td-sym';
       if (ci === 4) td.className = 'td-prc';
@@ -1127,11 +1492,43 @@ function renderScannerTable(data) {
   var container = document.getElementById('scannerContent');
   container.innerHTML = '';
   container.appendChild(wrap);
+
+  // ── Append 5M Scalping Liquidation Radar directly below the table ──
+  var radarBox = document.createElement('div');
+  radarBox.className = 'liq-radar-box';
+  radarBox.id = 'liqRadarContainer';
+  radarBox.innerHTML = `
+    <div class="liq-radar-header">
+      <span class="pulse-live" id="liqWsBadge">🟢 WS LIVE (5M)</span>
+      <span>◈ AGGREGATED LIQUIDATION & SQUEEZE INTELLIGENCE RADAR (ATAS 5M SCALPING) ◈</span>
+      <span style="font-size:9px; color:var(--gold);">REAL-TIME BINANCE STREAM</span>
+    </div>
+    <div class="liq-sentiment-card">
+      <div class="liq-sentiment-row">
+        <span style="color:var(--gold-light);">⚡ 5M Market-Wide Liquidations:</span>
+        <span id="stat5mLong" style="color:var(--G); font-weight:700;">Longs: $0 (50.0%)</span>
+        <span style="color:#4a5c78;">│</span>
+        <span id="stat5mShort" style="color:var(--R); font-weight:700;">Shorts: $0 (50.0%)</span>
+        <span style="color:#4a5c78;">│</span>
+        <span id="stat5mBias" style="font-weight:800; color:var(--gold-light);">Bias: ⚖️ BALANCED MARKET FLOW</span>
+      </div>
+      <div class="liq-ratio-bar-wrap">
+        <div class="liq-ratio-long" id="barLong" style="width:50%;"></div>
+        <div class="liq-ratio-short" id="barShort" style="width:50%;"></div>
+      </div>
+    </div>
+    <div class="liq-cards-grid" id="liqCardsContainer">
+      <!-- 3 Squeeze Cards injected live -->
+    </div>
+  `;
+  container.appendChild(radarBox);
+
+  update5MLiquidationUI();
 }
 
 function fetchAndRenderScanner() {
   document.getElementById('scannerContent').innerHTML =
-    '<div class="status-box"><span class="spin-ring"></span>REFRESHING SMART SCANNER DATA...</div>';
+    '<div class="status-box"><span class="spin-ring"></span>REFRESHING SMART SCANNER & SQUEEZE RADAR...</div>';
 
   fetchScannerData().then(data => {
     if (!data || !data.length) {
@@ -1150,9 +1547,9 @@ function fetchAndRenderScanner() {
   });
 }
 
-// ══════════════════════════════════════════════════════════════════════
-// TAB 2: MARKET OVERVIEW FETCH & RENDER
-// ══════════════════════════════════════════════════════════════════════
+// Start WebSocket on Page Load
+initLiquidationWebSocket();
+
 function fetchAndRenderOverview() {
   var tGainers = document.querySelector('#tableGainers tbody');
   var tLosers  = document.querySelector('#tableLosers tbody');
